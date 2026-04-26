@@ -1,0 +1,14 @@
+---
+# handlers/main.yml - Обработчики для nginx
+
+#- name: restart nginx
+#  systemd:
+#    name: nginx # уточнить название.
+#    state: restarted
+#  tags: ['service']
+
+#- name: reload nginx
+#  systemd:
+#    name: nginx
+#    state: reloaded
+#  tags: ['service']

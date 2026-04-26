@@ -1,0 +1,23 @@
+---
+# vars/main.yml - Переменные для PostgreSQL
+# Эти значения имеют высокий приоритет
+
+# Версия PostgreSQL (для Ubuntu Bionic)
+postgresql_version: 13
+
+# Имя базы данных для приложения
+postgresql_database: myapp
+
+# Пользователь базы данных
+postgresql_user: user
+
+# Пароль пользователя
+postgresql_password: 12345678
+
+# Порт PostgreSQL
+postgresql_port: 5432
+
+# Разрешить подключения с указанных сетей
+postgresql_listen_addresses: "*"
+postgresql_allow_networks:
+  - "192.168.3.0/24"  # Ваша приватная сеть

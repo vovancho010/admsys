@@ -1,0 +1,21 @@
+---
+# defaults/main.yml - Настройки по умолчанию для веб-сервера
+
+# Какой веб-сервер использовать (nginx или apache2)
+web_server: "nginx"
+
+# Пакеты для установки
+packages:
+  - "{{ web_server }}"
+  - php-fpm
+  - php-pgsql      # Для PostgreSQL. Если используете MySQL - замените на php-mysql
+  - php-curl
+  - php-gd
+  - php-mbstring
+  - php-xml
+  - php-zip
+  - curl
+  - git            # Для скачивания кода приложения
+
+# Версия PHP (автоматически определится, но можно указать)
+php_version: "7.2"
