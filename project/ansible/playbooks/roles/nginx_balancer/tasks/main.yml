@@ -1,0 +1,64 @@
+---
+# tasks/main.yml - Установка и настройка Nginx балансировщика
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: ['packages']
+
+- name: Install Nginx
+  apt:
+    name: nginx
+    state: "{{ nginx_version }}"
+  tags: ['packages']
+
+- name: Ensure Nginx is stopped for configuration
+  systemd:
+    name: nginx
+    state: stopped
+  tags: ['configure']
+
+- name: Create Nginx configuration from template
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/loadbalancer
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload nginx
+  tags: ['configure']
+
+- name: Enable the loadbalancer site
+  file:
+    src: /etc/nginx/sites-available/loadbalancer
+    dest: /etc/nginx/sites-enabled/loadbalancer
+    state: link
+  notify: reload nginx
+  tags: ['configure']
+
+- name: Remove default Nginx site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: reload nginx
+  tags: ['configure']
+
+- name: Test Nginx configuration
+  command: nginx -t
+  register: nginx_test
+  changed_when: false
+  tags: ['configure']
+
+- name: Display Nginx config test result
+  debug:
+    msg: "Nginx config is {{ 'OK' if nginx_test.rc == 0 else 'FAILED' }}"
+  when: nginx_test.rc != 0
+  tags: ['configure']
+
+- name: Start and enable Nginx
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+  tags: ['service']

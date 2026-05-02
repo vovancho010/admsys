@@ -1,0 +1,18 @@
+---
+# handlers/main.yml - Обработчики для веб-сервера
+
+- name: restart web server
+  systemd:
+    name: "{{ web_server }}"
+    state: restarted
+
+- name: reload web server
+  systemd:
+    name: "{{ web_server }}"
+    state: reloaded
+
+- name: restart php-fpm
+  systemd:
+    name: "php{{ php_version }}-fpm"
+    state: restarted
+  when: web_server == "nginx"

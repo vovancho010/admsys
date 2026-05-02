@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  become: true
+  gather_facts: false
+  tags: ['always']
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+- import_playbook: database.yml  # Шаг 1: База данных
+- import_playbook: webserver.yml  # Шаг 2: Веб-серверы
+- import_playbook: loadbalancer.yml  # Шаг 3: Балансировщик
